@@ -25,8 +25,9 @@ readfile(){
         sed -n ${STARTLINE},${LINESCOUNTER}p ${SOURCEFILE}
 }
 printstr(){
-        echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
-        echo "Список ошибок и их типы за заданный промежуток времени" >> ${MAILFILE}
+        echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" > ${MAILFILE}
+        echo "Список ошибок и их типы за следующий промежуток времени " >> ${MAILFILE}
+        echo $(sed -n ${STARTLINE}p ${SOURCEFILE} |cut -d" " --fields=4,5) ' --- ' $(sed -n ${LINESCOUNTER}p ${SOURCEFILE} |cut -d" " --fields=4,5) >> ${MAILFILE}
         echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
         readfile |cut -d" " -f9|grep [45].. |  sort|uniq -c |sort -nr|head -n 10 >> ${MAILFILE}
         echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
