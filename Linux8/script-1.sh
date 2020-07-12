@@ -1,23 +1,55 @@
-#!/bin/bash 
-  
+#!/bin/bash
+
 LOCKFILE=/tmp/lock.lck
+SOURCEFILE=/home/$USER/access.log
+MAILFILE=/home/$USER/mail.txt
+FILECOUNTER=/home/$USER/counter
+LINESCOUNTER=$(wc -l $SOURCEFILE | cut -d" " -f1)
+source $FILECOUNTER
+echo $STARTLINE
 
 if [ -e ${LOCKFILE} ] && kill -0 `cat ${LOCKFILE}`; then
-    echo "Scrip is already running" 
+    echo "Script is already running"
     exit
 fi
 
-# make sure the lockfile is removed when we exit and then claim it 
+if [ ! -f ${MAILFILE} ]; then touch /home/$USER/mail.txt; fi
 
+# make sure the lockfile is removed when we exit and then claim it
 trap "rm -f ${LOCKFILE}; exit" INT TERM EXIT
 echo $$ > ${LOCKFILE}
 
-# do stuff 
+# do stuff
+# ERRORS
+readfile(){
+        sed -n ${STARTLINE},${LINESCOUNTER}p ${SOURCEFILE}
+}
+printstr(){
+        echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
+        echo "Список ошибок и их типы за заданный промежуток времени" >> ${MAILFILE}
+        echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
+        readfile |cut -d" " -f9|grep [45].. |  sort|uniq -c |sort -nr|head -n 10 >> ${MAILFILE}
+        echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
+#        echo -e '\n' >> ${MAILFILE}
+        sleep 1
 
+#TOP
+        echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> $MAILFILE
+        echo "TOP 10 запрашиваемых адресов (с наибольшим кол-вом запросов) с указанием кол-ва запросов c момента последнего запуска скрипта" >> $MAILFILE
+        echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
+        readfile |cut -d" " -f11| sort|uniq -c |sort -nr|head -n 10 >> ${MAILFILE}
+        echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
+#        echo -e '\n' >> ${MAILFILE}
 
-more /home/nick/access-4560-644067.log |cut -d" " -f9|grep [45].. |  sort|uniq -c |sort -nr|head -n 10 > /home/nick/mail.txt
-echo '\\n' >> /home/nick/mail.txt
-sleep 10
-more /home/nick/access-4560-644067.log |cut -d" " -f11| sort|uniq -c |sort -nr|head -n 10 >> /home/nick/mail.txt
-echo '\\n' >> /home/nick/mail.txt
-cat /home/nick/access-4560-644067.log |cut -d" " -f1| sort|uniq -c |sort -nr|head -n 10 >> /home/nick/mail.txt
+#TOP
+        echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
+        echo "X IP адресов (с наибольшим кол-вом запросов) с указанием кол-ва запросов c момента последнего запуска скрипта" >> ${MAILFILE}
+        echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
+        readfile |cut -d" " -f1| sort|uniq -c |sort -nr|head -n 10 >> ${MAILFILE}
+        echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
+   }
+printstr
+
+sed -i "s/.*STARTLINE=${STARTLINE}*/STARTLINE=$(expr ${LINESCOUNTER} + 1)/g" $FILECOUNTER
+#echo "STARTLINE=$(expr $LINESCOUNTER + 1)" > $FILECOUNTER
+#sed -n ${STARTLINE},${LINESCOUNTER}p ${SOURCEFILE} |cut -d" " -f9|grep [45].. |  sort|uniq -c |sort -nr|head -n 10
