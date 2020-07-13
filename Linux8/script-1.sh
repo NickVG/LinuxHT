@@ -52,5 +52,7 @@ printstr(){
 printstr
 
 sed -i "s/.*STARTLINE=${STARTLINE}*/STARTLINE=$(expr ${LINESCOUNTER} + 1)/g" $FILECOUNTER
+echo "" | mutt -s "report at $(date)" nick@nick-VirtualBox -i "body.txt" -a "mail.txt"
+
 #echo "STARTLINE=$(expr $LINESCOUNTER + 1)" > $FILECOUNTER
 #sed -n ${STARTLINE},${LINESCOUNTER}p ${SOURCEFILE} |cut -d" " -f9|grep [45].. |  sort|uniq -c |sort -nr|head -n 10
