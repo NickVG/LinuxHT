@@ -5,6 +5,7 @@ SOURCEFILE=/home/$USER/access.log
 MAILFILE=/home/$USER/mail.txt
 FILECOUNTER=/home/$USER/counter
 LINESCOUNTER=$(wc -l $SOURCEFILE | cut -d" " -f1)
+# SED: $= (10.2 c.); awk 'END {print NR}' "httpd.spec"
 source $FILECOUNTER
 echo $STARTLINE
 
