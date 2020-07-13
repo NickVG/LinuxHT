@@ -1,1 +1,5 @@
-STARTLINE=672
+STARTLINE=1
+LOCKFILE=/tmp/lock.lck
+SOURCEFILE=/home/$USER/access.log
+MAILFILE=/home/$USER/mail.txt
+FILECOUNTER=/home/$USER/counter
