@@ -37,8 +37,12 @@
 
     printstr(){
             echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" > ${MAILFILE}
-            echo "Список ошибок и их типы за следующий промежуток времени " >> ${MAILFILE}
-            echo $(readfile ${STARTLINE} ${STARTLINE} ${SOURCEFILE} 4,5 1) ' --- ' $(sed -n ${LINESCOUNTER}p ${SOURCEFILE} |cut -d" " --fields=4,5 1) >> ${MAILFILE}
+            echo "Отчёт за следующий промежуток времени: " |tee ${BODYFILE} >> ${MAILFILE}
+            echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
+            echo $(readfile ${STARTLINE} ${STARTLINE} ${SOURCEFILE} 4,5 1) ' --- ' $(readfile ${LINESCOUNTER} ${LINESCOUNTER} ${SOURCEFILE} 4,5 1) |tee ${BODYFILE} >> ${MAILFILE}
+            echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
+            echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
+            echo "Список ошибок и их типы" >> ${MAILFILE}
             echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
             readfile ${STARTLINE} ${LINESCOUNTER} ${SOURCEFILE} 9|grep [45].. |  sort|uniq -c |sort -nr|head -n 10 >> ${MAILFILE}
             echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
@@ -65,4 +69,4 @@
 
 Отправляем письмо
 
-    echo "" | mutt -s "report at $(date)" $address -i "body.txt" -a "mail.txt"
+    echo "" | mutt -s "report at $(date)" $ADDRESS -i "${BODYFILE}" -a "${MAILFILE}"
