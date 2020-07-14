@@ -4,4 +4,4 @@ SOURCEFILE=$(find /vagrant/files/ -mtime 0 -name access*.log)
 MAILFILE=/vagrant/files/mail.txt
 FILECOUNTER=/vagrant/files/counter
 BODYFILE=/vagrant/files/body.txt
-ADDRESS='vagrant@systemd'
+ADDRESS='vagrant@bash'
