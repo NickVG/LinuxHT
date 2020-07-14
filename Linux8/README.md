@@ -15,9 +15,9 @@
       exit
   fi
 
-Создаём лок для защиты от мультизапуска, в лок записываем PID
+Создаём лок для защиты от мультизапуска, в лок записываем PID, лок удаляется при получении сигнала на завершение работы скрипта
 
-  # make sure the lockfile is removed when we exit and then claim it
+  #make sure the lockfile is removed when we exit and then claim it
   trap "rm -f ${LOCKFILE}; exit" INT TERM EXIT
   echo $$ > ${LOCKFILE}
 
@@ -27,7 +27,8 @@
 
 Создаём функцию для чтения определённых полей
 
-  # do stuff
+  #функция для считываня полей
+  #function for fields reading
   readfile(){
           sed -n $1,$2p $3|cut -d" " --fields=$4
   }
@@ -40,16 +41,14 @@
           echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
           readfile ${STARTLINE} ${LINESCOUNTER} ${SOURCEFILE} 9|grep [45].. |  sort|uniq -c |sort -nr|head -n 10 >> ${MAILFILE}
           echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
-  #        echo -e '\n' >> ${MAILFILE}
-
+  
   #TOP Запрашиваемых адресов
           echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> $MAILFILE
           echo "TOP 10 запрашиваемых адресов (с наибольшим кол-вом запросов) с указанием кол-ва запросов c момента последнего запуска скрипта" >> $MAILFILE
           echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
           readfile ${STARTLINE} ${LINESCOUNTER} ${SOURCEFILE} 11| sort|uniq -c |sort -nr|head -n 10 >> ${MAILFILE}
           echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
-  #        echo -e '\n' >> ${MAILFILE}
-
+  
   #TOP Запросов 
           echo "= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =" >> ${MAILFILE}
           echo "X IP адресов (с наибольшим кол-вом запросов) с указанием кол-ва запросов c момента последнего запуска скрипта" >> ${MAILFILE}
