@@ -1,5 +1,7 @@
 STARTLINE=1
 LOCKFILE=/tmp/lock.lck
-SOURCEFILE=/home/$USER/access.log
-MAILFILE=/home/$USER/mail.txt
-FILECOUNTER=/home/$USER/counter
+SOURCEFILE=$(find /vagrant/files/ -mtime 0 -name access*.log)
+MAILFILE=/vagrant/files/mail.txt
+FILECOUNTER=/vagrant/files/counter
+BODYFILE=/vagrant/files/body.txt
+ADDRESS='vagrant@systemd'
