@@ -49,8 +49,8 @@ Vagrant.configure("2") do |config|
 #	      mkdir -p ~root/.ssh
 #              cp ~vagrant/.ssh/auth* ~root/.ssh
 #	      yum install -y mdadm smartmontools hdparm gdisk
-#  	  SHELL
-#          box.vm.provision "shell", path: "./scripts/install.sh"
+  	  SHELL
+          box.vm.provision "shell", path: "./scripts/task-2.sh"
       end
   end
 end
