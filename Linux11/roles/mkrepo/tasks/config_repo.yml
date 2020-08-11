@@ -1,0 +1,29 @@
+---
+- name: Ansible check directory.
+  stat:
+    path: /usr/share/nginx/html/repo/
+  register: my_folder
+ 
+- name: "echo if directory already existed"
+  debug:
+    msg: "the jboss directory is already existed"
+  when: my_folder.stat.exists
+ 
+- name: "Ansible Create directory if not exists"
+  file:
+    path: /usr/share/nginx/html/repo/x86
+    state: directory
+    mode: 0755
+    group: root
+    owner: root
+  when: my_folder.stat.exists == false
+  
+- name: Download some RPM
+  get_url:
+    url: https://nginx.org/packages/centos/7/SRPMS/nginx-1.14.1-1.el7_4.ngx.src.rpm
+    dest: /usr/share/nginx/html/repo/nginx-1.14.1-1.el7_4.ngx.x86_64.rpm
+
+- name: Create local repo
+  template:
+    src: templates/otus.repo.j2
+    dest: /etc/yum.repos.d/otus.repo

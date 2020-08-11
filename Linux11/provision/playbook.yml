@@ -1,0 +1,28 @@
+---
+# Runs only on host1
+- hosts: host1
+  become: true
+  gather_facts: false
+  tasks:
+
+  - name: Install packages only on host1
+    yum:
+      name:
+        - telnet
+        - vim 
+      state: latest
+
+# Runs only on host2      
+- hosts: host2
+  become: true
+  gather_facts: false
+  tasks:
+
+  - name: Install packages only on host1
+    yum:
+      name:
+        - bind-utils
+      state: latest
+       
+
+

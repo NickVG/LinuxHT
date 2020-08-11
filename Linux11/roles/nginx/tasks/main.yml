@@ -1,0 +1,10 @@
+---
+- name: Install NGINX
+  include_tasks: install.yml
+
+- name: configure Nginx
+  include_tasks: config_nginx.yml
+
+- name: Disable selinux
+  include_tasks: selinux.yml
+

@@ -1,0 +1,6 @@
+- name: Fail2Ban
+  hosts: all
+  become: True
+  strategy: linear
+  roles:
+    - fail2ban
