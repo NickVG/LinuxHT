@@ -23,6 +23,10 @@
     url: https://nginx.org/packages/centos/7/SRPMS/nginx-1.14.1-1.el7_4.ngx.src.rpm
     dest: /usr/share/nginx/html/repo/nginx-1.14.1-1.el7_4.ngx.x86_64.rpm
 
+- name: CMD Createrepo
+  command:
+    cmd: createrepo /usr/share/nginx/html/repo/
+
 - name: Create local repo
   template:
     src: templates/otus.repo.j2
