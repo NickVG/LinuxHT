@@ -20,7 +20,7 @@
   
 - name: Download some RPM
   get_url:
-    url: https://nginx.org/packages/centos/7/SRPMS/nginx-1.14.1-1.el7_4.ngx.src.rpm
+    url: https://github.com/NickVG/LinuxHT/raw/master/Linux11/files/nginx-1.14.1-1.el7_4.ngx.x86_64.rpm
     dest: /usr/share/nginx/html/repo/nginx-1.14.1-1.el7_4.ngx.x86_64.rpm
 
 - name: CMD Createrepo
