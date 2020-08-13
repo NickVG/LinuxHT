@@ -7,9 +7,10 @@
 # Инструкция по применению
 ## Перед запуском
 Требуется устнаовить git, ansible, virtualbox, vagrant
-
+```bash
 git clone https://github.com/NickVG/LinuxHT.git
 cd LinuxHT/Linux11/
+```
 Все дальнейшие действия нужно делать из текущего каталога.
 
 ## Запускаем и работаем со стендом
@@ -25,11 +26,13 @@ cd LinuxHT/Linux11/
   hosts: host1
   become: true
   roles:
-    - nginx
+    - nginx 
     - mkrepo
 ```
+Роль nginx поднимает вебсервер на центос
+Роль mkrepo создаёт репозиторий
 
-# Некоторые полезные команды
+# список тасков в ролях
 
 Посмотреть все таски, которые входят в роль:
 ```bash
