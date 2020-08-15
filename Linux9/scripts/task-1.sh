@@ -1,6 +1,6 @@
 #! /bin/bash
 
-yum install -y redhat-lsb-core wget rpmdevtools rpm-build createrepo yum-utils
+yum install -y redhat-lsb-core wget rpmdevtools rpm-build createrepo yum-utils gcc.x86_64
 groupadd builder
 useradd -g builder builder
 mkdir /tmp/nginx && cd /tmp/nginx
