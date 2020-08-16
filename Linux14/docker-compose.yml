@@ -1,0 +1,31 @@
+version: '3'
+services:
+  nginx:
+    depends_on:
+      - php
+    hostname: nginx
+    image: ingorbunovi/docker-hometask:${NGINX_VERSION}
+    container_name: nginx
+#     volumes:
+#    - post_db:/data/db
+#    environment:
+#      - ZIPKIN_ENABLED=${ZIPKIN_ENABLED}
+    networks:
+      - frontend
+    ports:
+      - "80:8080"
+  php:
+    hostname: php
+    container_name: php
+    image: ingorbunovi/php:${PHP_VERSION}
+    #    volumes:
+    # - rabbitmq:/var/lib/rabbitmq
+    networks:
+      - frontend
+
+#volumes:
+
+networks:
+  frontend:
+#  backend:
+

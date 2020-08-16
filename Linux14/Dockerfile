@@ -10,7 +10,10 @@
 #CMD ["nginx", "-g", "daemon off;"]
 
 FROM nginx:1.18.0-alpine
-WORKDIR /usr/share/nginx/html
-COPY index.html index.html
+COPY ./files/nginx.conf /etc/nginx/conf.d/nginx.conf
+#WORKDIR /usr/share/nginx/html
+#COPY ./files/index.php /usr/share/nginx/html/
+COPY ./files/index.html ./files/index.php /usr/share/nginx/html/
+#COPY ./files/index.html /usr/share/nginx/html/index.html
 EXPOSE 80 443
 
