@@ -10,7 +10,7 @@
 #CMD ["nginx", "-g", "daemon off;"]
 
 FROM nginx:1.18.0-alpine
-COPY ./files/nginx.conf /etc/nginx/conf.d/nginx.conf
+#COPY ./files/nginx.conf /etc/nginx/conf.d/nginx.conf
 #WORKDIR /usr/share/nginx/html
 #COPY ./files/index.php /usr/share/nginx/html/
 COPY ./files/index.html ./files/index.php /usr/share/nginx/html/
