@@ -12,17 +12,19 @@
         - vim 
       state: latest
 
+  - name: Configure host
+    script: ./task1.sh
 # Runs only on host2      
-- hosts: host2
-  become: true
-  gather_facts: false
-  tasks:
+#- hosts: host2
+#  become: true
+#  gather_facts: false
+#  tasks:
 
-  - name: Install packages only on host1
-    yum:
-      name:
-        - bind-utils
-      state: latest
+#  - name: Install packages only on host1
+#    yum:
+#      name:
+#        - bind-utils
+#      state: latest
        
 
 

@@ -4,7 +4,6 @@
   become: true
   gather_facts: false
   tasks:
-
   - name: Install packages only on host1
     yum:
       name:
@@ -17,8 +16,7 @@
   become: true
   gather_facts: false
   tasks:
-
-  - name: Install packages only on host1
+  - name: Install packages only on host2
     yum:
       name:
         - bind-utils
