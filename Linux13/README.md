@@ -39,7 +39,7 @@ echo > /var/log/audit/audit.log
 
 На клиенте пробуем внести запись в DNS, получаем ошибку.
 
-![Image of DNS client error]DNS_error.PNG
+![Image of DNS client error](DNS_error.PNG)
 	
 идём на DNS сервер и смотрим статус named и ошибки в audit.log.
 
