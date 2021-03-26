@@ -1,0 +1,53 @@
+---
+# Runs only on host1
+- hosts: nginx
+  become: true
+  gather_facts: false
+  tasks:
+  - name: Install EPEL
+    yum:
+      name:
+        - epel-release
+  
+  - name: Install packages only on web
+    yum:
+      name:
+        - vim
+        - nginx
+        - centos-release-scl
+        - auditd
+        - systemd-journal-gateway
+      state: latest
+  - name: Start NGINX
+    systemd:
+      name: nginx.service
+      state: started
+      enabled: yes
+    
+  - name: Configure host
+    script: ./task1.sh
+
+# Runs only on host2      
+- hosts: logging
+  become: true
+  gather_facts: false
+  tasks:
+
+  - name: Install packages only on logging
+    yum:
+      name:
+        - bind-utils
+        - systemd-journal-gateway
+      state: latest
+mkdir -p /var/log/journal/remote
+chown systemd-journal-remote:systemd-journal-remote /var/log/journal/remote
+lib/systemd/system/systemd-journal-remote.service
+sudo systemctl restart systemd-journal-remote
+  - name: Configure host
+    script: ./task1.sh
+       
+  - name: Confid remote logging gor nginx
+    sudo vim /etc/systemd/journal-upload.conf
+    URI=http://logging 
+
+
