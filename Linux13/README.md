@@ -14,19 +14,19 @@
 
 ![Image of DNS client error](errors.PNG)
 
-смотрим в journalctl и получаем описание и варианты решения проблемы даже без audit2why:
+смотрим в journalctl и получаем описание и варианты решения проблемы даже без audit2why и sealert:
 
 ![Image of DNS client error](journalctl.PNG)
 	
-вараинт решения номер один, это добавить порт 2222 для веб-сервера
+##### Вариант решения номер один, это добавить порт 2222 для веб-сервера
 
 ![Image of DNS client error](solution_via_semanage.PNG)
 
-вариант решения номер два, это включить булевой значение nis_enabled
+##### Вариант решения номер два, это включить булевую политику nis_enabled
  
 ![Image of DNS client error](solution_via_setsebool.PNG)
  
-вариант решения номер три, это создать модуль для selinux
+##### Вариант решения номер три, это создать модуль для selinux
 
 ![Image of DNS client error](solution_via_semodule.PNG)
 
