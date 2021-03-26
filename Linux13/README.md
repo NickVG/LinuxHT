@@ -1,4 +1,4 @@
-``ДЗ по SELinux
+#ДЗ по SELinux
 
 #### Запустить nginx на нестандартном порту 3-мя разными способами
 
@@ -12,30 +12,30 @@
 
 рестартуем nginx и получаем ошибку:
 
-	errors.PNG
+![Image of DNS client error](errors.PNG)
 
 смотрим в journalctl и получаем описание и варианты решения проблемы даже без audit2why:
 
-	journalctl.PNG
+![Image of DNS client error](journalctl.PNG)
 	
 вараинт решения номер один, это добавить порт 2222 для веб-сервера
 
-	solution_via_semanage.PNG
+![Image of DNS client error](solution_via_semanage.PNG)
 
 вариант решения номер два, это включить булевой значение nis_enabled
  
-	solution_via_setsebool.PNG
+![Image of DNS client error](solution_via_setsebool.PNG)
  
 вариант решения номер три, это создать модуль для selinux
 
-	solution_via_semodule.PNG
+![Image of DNS client error](solution_via_semodule.PNG)
 
 
 #### SELinux: проблема с удаленным обновлением зоны DNS
 
 Обнуляем audit.log
 
-echo > /var/log/audit/audit.log
+	echo > /var/log/audit/audit.log
 
 На клиенте пробуем внести запись в DNS, получаем ошибку.
 
@@ -43,7 +43,7 @@ echo > /var/log/audit/audit.log
 	
 идём на DNS сервер и смотрим статус named и ошибки в audit.log.
 
-	DNS_error_server.PNG
+![Image of DNS client error](DNS_error_server.PNG)
 	
 Из ошибок видим, что selinux не даёт создать файл /etc/named/dynamic/named.ddns.lab.view1.jnl.
 
@@ -74,10 +74,10 @@ sealert предлагает следующие варианты:
 	
 Меняем контекст директории и перезапускаем сервис:
 
-	DNS_change_context.PNG
+![Image of DNS client error](DNS_change_context.PNG)
 	
 Пробуем сделать запись в DNS
 
-	DNS_success.PNG
+![Image of DNS client error](DNS_success.PNG)
 	
 Готово.
