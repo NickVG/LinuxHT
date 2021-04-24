@@ -13,3 +13,12 @@ autorefresh=1
 type=rpm-md
 EOF
 
+mkdir -p /var/log/rsyslog
+semanage fcontext -a -t var_log_t '/var/log/rsyslog(/.*)?'
+restorecon -Rv /var/log/rsyslog
+firewall-cmd --permanent --add-port=514/udp; sudo firewall-cmd --permanent --add-port=514/tcp
+
+cat /vagrant/provision/log/log-rsyslog.conf > /etc/rsyslog.conf
+systemctl restart rsyslog
+systemctl daemon-reload
+

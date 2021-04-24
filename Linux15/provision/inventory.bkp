@@ -1,0 +1,3 @@
+log ansible_host=192.168.11.150 ansible_user=vagrant ansible_ssh_pass=vagrant
+web ansible_host=192.168.11.151 ansible_user=vagrant ansible_ssh_pass=vagrant
+elk ansible_host=192.168.11.152 ansible_user=vagrant ansible_ssh_pass=vagrant

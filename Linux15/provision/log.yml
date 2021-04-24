@@ -1,0 +1,39 @@
+---
+# Runs only on LOG
+- hosts: log
+  become: true
+  gather_facts: false
+  tasks:
+  - name: add elastek repo
+    script: ./task_elastic.sh
+  - selinux:
+      state: disabled
+  - name: Install packages only on log server
+    yum:
+      name:
+        - epel-release
+        - rsyslog
+        - filebeat
+        - ntp
+        - audit
+        - audispd-plugins
+        - policycoreutils-python
+      state: present
+  - name: start and enable ntpd service
+    service:
+      name: ntpd
+      state: started
+      enabled: yes
+#  - name: add Elastic repo
+#    script: ./task_elastic.sh
+  - name: add filebeat
+    script: ./task_filebeat.sh
+#  - name: Disable selinux for redhat systems
+#    command: setenforce 0 
+#  - name: create directory for remote logs
+#    file:
+#      path: /var/log/rsyslog/remote
+#      state: directory
+  - name: configure logging via script
+    script: ./task_log.sh
+

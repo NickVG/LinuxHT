@@ -1,0 +1,53 @@
+---
+# Runs only on ELK
+- hosts: elk
+  vars:
+    network_host: "network.host: 127.0.0.1"
+  become: true
+  gather_facts: false
+  tasks:
+  - name: add Elastic repo an disable selinux
+    script: ./task_elastic.sh
+  - name: Install packages only on ELK
+    yum:
+      name:
+        - epel-release
+        - java-1.8.0-openjdk
+        - elasticsearch
+#        - filebeat
+        - logstash
+        - vim
+      state: present
+  - name: Configure elsticsearch
+    ansible.builtin.lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      line: network.host: 0.0.0.0
+      create: yes
+  - name: Configure elsticsearch
+    ansible.builtin.lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      line: http.port: 9200
+      create: yes
+  - name: Configure elsticsearch
+    ansible.builtin.lineinfile:
+      path: /etc/elasticsearch/jvm.options
+      line: -Xms1g
+      create: yes
+  - name: Configure elsticsearch
+    ansible.builtin.lineinfile:
+      path: /etc/elasticsearch/jvm.options
+      line: -Xmx1g
+      create: yes
+
+
+#  - name: Configure elsticsearch
+#    shell: printf 'network.host: 127.0.0.1' >> /etc/elasticsearch/elasticsearch.yml
+  - name: Start service elasticsearch, if not running
+    service:
+      name: elasticsearch
+      state: started
+
+#  - selinux:
+#      state: disabled
+#  - name: Disable selinux for redhat systems
+#    command: setenforce 0

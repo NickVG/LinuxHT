@@ -1,40 +1,125 @@
 ---
-# Runs only on host1
-- hosts: host1
+- hosts: web
   become: true
   gather_facts: false
   tasks:
-  - name: Install EPEL
+  - name: add nginx repo
+    script: ./task_nginx.sh
+# Elastic repo следует раскомитить, если планируется использовать сразу стек ELK
+#  - name: add Elastic repo
+#  #    script: ./task_elastic.sh
+  - name: Install packages only on web
     yum:
       name:
-        - https://repo.zabbix.com/zabbix/5.0/rhel/7/x86_64/zabbix-release-5.0-1.el7.noarch.rpm
+      - nginx
+      - audit
+      - audispd-plugins
+      - policycoreutils-python
+      - vim
+      state: present
+  - name: Configure Critical log and audit log store
+    script: ./task_nginx_remotelog.sh
+  - name: Start and enable NGINX
+    service:
+      name: nginx
+      state: started
+      enabled: yes
+
+- hosts: log
+  become: true
+  gather_facts: false
+  tasks:
+# Следует активировать, если плнируется использовать стек ELK на сервере log
+#  - name: add elastek repo
+#  #    script: ./task_elastic.sh
+#  - selinux:
+#      state: disabled
+  - name: Install packages only on log server
+    yum:
+      name:
         - epel-release
-  
-  - name: Install packages only on host1
+#        - filebeat
+        - vim
+        - ntp
+        - audit
+        - audispd-plugins
+        - policycoreutils-python
+      state: present
+# Следует активировать, если плнируется использовать стек ELK на сервере log/ 
+# Не забыть поправить скрпит лог соответствующим образом!!!
+#  - name: add filebeat
+#    script: ./task_filebeat.sh
+  - name: configure logging via script
+    script: ./task_log.sh
+
+- hosts: elk
+  vars:
+    network_host: "network.host: 0.0.0.0"
+    http_port: "http.port: 9200"
+    discovery_type: "discovery.type: single-node"
+    server_host: "server.host: 0.0.0.0"
+  become: true
+  gather_facts: false
+  tasks:
+  - name: add Elastic repo an disable selinux
+    script: ./task_elastic.sh
+  - name: Install packages only on ELK
     yum:
       name:
-        - telnet
+        - epel-release
+        - java-1.8.0-openjdk
+        - elasticsearch
+        - filebeat
+#        - logstash
         - vim
-        - nginx
-        - postgresql 
-        - zabbix-server-pgsql
-        - zabbix-agent
-        - centos-release-scl
-      state: latest
-    
-  - name: Configure host
-    script: ./task1.sh
-# Runs only on host2      
-#- hosts: host2
-#  become: true
-#  gather_facts: false
-#  tasks:
+        - kibana
+      state: present
+  - name: Configure elsticsearch
+    ansible.builtin.lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      line: "{{ network_host }}"
+      create: yes
+  - name: Configure elsticsearch
+    ansible.builtin.lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      line: "{{ http_port }}"
+      create: yes
+  - name: Configure elsticsearch
+    ansible.builtin.lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      line: "{{ discovery_type }}"
+      create: yes
+  - name: Configure elsticsearch memory
+    ansible.builtin.lineinfile:
+      path: /etc/elasticsearch/jvm.options
+      line: -Xms1g
+      create: yes
+  - name: Configure elsticsearch memory
+    ansible.builtin.lineinfile:
+      path: /etc/elasticsearch/jvm.options
+      line: -Xmx1g
+      create: yes
+  - name: Configure kibana
+    ansible.builtin.lineinfile:
+      path: /etc/kibana/kibana.yml
+      line: "{{ server_host }}"
+      create: yes
+  - name: Configure filebeat and nginx for ELK
+    script: ./task_elk_filebeat.sh
 
-#  - name: Install packages only on host1
-#    yum:
-#      name:
-#        - bind-utils
-#      state: latest
-       
 
-
+  - name: Start service elasticsearch, if not running
+    service:
+      name: elasticsearch
+      state: started
+      enabled: yes
+  - name: Start service kibana, if not running
+    service:
+      name: kibana
+      state: started
+      enabled: yes
+  - name: Start service filebeat, if not running
+    service:
+      name: filebeat
+      state: started
+      enabled: yes

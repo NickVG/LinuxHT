@@ -1,0 +1,39 @@
+---
+
+# Runs only on WEB
+- hosts: web
+  become: true
+  gather_facts: false
+  tasks:
+#  - selinux:
+#      state: disabled
+  - name: add nginx repo
+    script: ./task_nginx.sh
+#  - name: add filebeat repo
+#    script: ./task_filebeat.sh
+  - name: add Elastic repo
+    script: ./task_elastic.sh
+  - name: Install packages only on web
+    yum:
+      name:
+      - rsyslog
+      - nginx
+      - filebeat
+      - audit
+      - audispd-plugins
+      - policycoreutils-python
+      state: present
+#  - name: add Elastic repo
+#    script: ./task_elastic.sh
+#  - name: add filebeat repo on web
+#    script: ./task_filebeat.sh
+#  - name: Disable selinux for redhat systems
+#    command: setenforce 0
+  - name: Configure Critical log snd audit log store
+    script: ./task_nginx_remotelog.sh
+  - name: Start and enable NGINX
+    service:
+      name: nginx
+      state: started
+      enabled: yes
+      
