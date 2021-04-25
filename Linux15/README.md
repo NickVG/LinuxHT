@@ -1,6 +1,7 @@
-``ДЗ по Monitoring
+# ДЗ по Monitoring
 
-**1. Настроить аудит на изменение конфигов nginx.**
+## Основная часть.
+### *1. Настроить аудит на изменение конфигов nginx.*
 
 Прописываем правила аудита:
 
@@ -17,7 +18,7 @@
 
 	ausearch -k nginx_conf
 
-**2. Отправлять все аудит логи на сервер log.**
+### *2. Отправлять все аудит логи на сервер log.*
 
 Для того, чтобы логи аудита писались на удалённый сервер необходимо установить пакет `audispd-plugins` и на клинет, и на сервер принимающий логи.
 На клиенте web:
@@ -47,7 +48,7 @@
 
 	ausearch -i -k nginx_conf
 
-**3. Критичные логи оставляем на web и отправляем на log.**
+### *3. Критичные логи оставляем на web и отправляем на log.*
 
 В файлы `/etc/audit/auditd.conf` и `/etc/rsyslog.conf` вносим соответствуюшие изменения
 
@@ -70,7 +71,7 @@
 
 
 
-**4. Все логи нжинкса отправляем на log(а заодно и на ELK), критичные также оставляем на web.**
+### *4. Все логи нжинкса отправляем на log(а заодно и на ELK), критичные также оставляем на web.*
 
 Добавляем в конфиг NGINX 
 
@@ -79,8 +80,8 @@
 
 ## **ELK**
 
-*** 1. Логи nginx отправляем на elk(настройка аналогична настройкам для сервера log). ***
-*** 2. Установим и настроим ELK
+### *1. Логи nginx отправляем на elk(настройка аналогична настройкам для сервера log).*
+### *2. Установим и настроим ELK*
 
 Добавим репозиторий.
 
@@ -96,7 +97,7 @@
 	type=rpm-md
 	EOF	
 
-*** 3. Установка ELK и настройка elastic:***
+### *3. Установка ELK и настройка elastic:*
 
 	[root@elk ~]# yum -y install elasticsearch kibana filebeat
 	[root@elk ~]# echo network.host: 0.0.0.0 >> /etc/elasticsearch/elasticsearch.yml
@@ -104,15 +105,12 @@
         [root@elk ~]# echo discovery.type: single-node >> /etc/elasticsearch/elasticsearch.yml
         [root@elk ~]# systemctl enable elasticsearch.service --now
 	
-*** 4. Настройка kibana: ***
+### *4. Настройка kibana:*
 
 	[root@elk ~]# sed -i  '/server.host/c server.host: "0.0.0.0"' /etc/kibana/kibana.yml
         [root@elk ~]# systemctl enable kibana.service --now
-*** 5. Настройка logstash: ***
-
 	
-
-*** 6. Настройка filebeat: ***
+### *5. Настройка filebeat:*
 
 	[root@elk ~]# sed -i  '/#host: "localhost:5601"/c\  host: "localhost:5601"' /etc/filebeat/filebeat.yml
         [root@elk ~]# sed -i "0,/#var.paths:/{s/#var.paths:.*/var.paths: [\"\/var\/log\/rsyslog\/192.168.11.150\/nginx_access.log*\"]/}" /etc/filebeat/modules.d/nginx.yml.disabled
