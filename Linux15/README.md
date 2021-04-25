@@ -114,9 +114,11 @@
 
 	[root@elk ~]# sed -i  '/#host: "localhost:5601"/c\  host: "localhost:5601"' /etc/filebeat/filebeat.yml
         [root@elk ~]# sed -i "0,/#var.paths:/{s/#var.paths:.*/var.paths: [\"\/var\/log\/rsyslog\/192.168.11.150\/nginx_access.log*\"]/}" /etc/filebeat/modules.d/nginx.yml.disabled
-        [root@elk ~]# sed -i "1,/#var.paths:/{s/#var.paths:.*/var.paths: [\"\/var\/log\/rsyslog\/192.168.11.150\/nginx_error.log*\"]/}" /etc/filebeat/modules.d/nginx.yml.disabled
+        [root@elk ~]# sed -i "0,/#var.paths:/{s/#var.paths:.*/var.paths: [\"\/var\/log\/rsyslog\/192.168.11.150\/nginx_error.log*\"]/}" /etc/filebeat/modules.d/nginx.yml.disabled
         [root@elk ~]# filebeat modules enable nginx
         [root@elk ~]# filebeat setup
         [root@elk ~]# systemctl enable filebeat.service --now
 
-
+![map](nginx.PNG)
+![nginx_access](nginx2.PNG)
+![index](nginx3.PNG)
