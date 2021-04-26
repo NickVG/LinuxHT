@@ -1,6 +1,7 @@
 # -*- mode: ruby -*-
 # vim: set ft=ruby :
 
+disk = './secondDisk.vdi'
 Vagrant.configure("2") do |config|
 
   config.vm.box = "centos/7"
@@ -8,11 +9,13 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "server" do |server|
     server.vm.network "private_network", ip: "192.168.11.150"
-    config.vm.disk :disk, name: "system", size: "20GB"
-    config.vm.disk :disk, name: "backup", size: "3GB"
     server.vm.provider "virtualbox" do |v|
+      unless File.exist?(disk)
+        v.customize ['createhd', '--filename', disk, '--variant', 'Fixed', '--size', 2 * 1024]
+      end
       v.memory = 512
       v.cpus = 1
+      v.customize ['storageattach', :id,  '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', disk]
     end
     server.vm.hostname = "server"
   end
@@ -27,9 +30,9 @@ Vagrant.configure("2") do |config|
     client.vm.hostname = "client"
   end
 
-#  config.vm.provision "BORG", type:'ansible' do |ansible|
-#    ansible.inventory_path = './provision/inventory'
-#    ansible.playbook = './provision/playbook.yml'
-#  end
+  config.vm.provision "BORG", type:'ansible' do |ansible|
+    ansible.inventory_path = './provision/inventory'
+    ansible.playbook = './provision/playbook.yml'
+  end
 end
 
