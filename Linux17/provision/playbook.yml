@@ -1,0 +1,12 @@
+---
+- name: Configuration of Backup
+  hosts: server
+  become: true
+  roles:
+    - borg 
+#    - mkrepo
+#  hosts: client
+#  become: true
+#  roles:
+#    - borgbackup
+    

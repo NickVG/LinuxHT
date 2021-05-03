@@ -1,0 +1,7 @@
+---
+# tasks file for ./roles/borg
+- name: Configure FS
+  include_tasks: mount.yml
+
+- name: Install borgbackup
+  include_tasks: install.yml

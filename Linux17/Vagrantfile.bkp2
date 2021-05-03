@@ -1,0 +1,42 @@
+# -*- mode: ruby -*-
+# vim: set ft=ruby :
+#
+ENV['VAGRANT_EXPERIMENTAL'] = "disks"
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "centos/7"
+  config.vbguest.auto_update = false
+#  config.vm.disk :disk, size: "40GB", name: "extra_storage"
+
+  config.vm.define "server" do |server|
+    server.vm.network "private_network", ip: "192.168.11.150"
+#    server.vm.disk :disk, size: "10GB", name: "extra_storage"
+    server.vm.provider "virtualbox" do |v|
+      v.memory = 4096
+      v.cpus = 1
+      file_to_disk = "mydisk.vmdk"
+      unless File.exist?(file_to_disk)
+        v.customize [ "createmedium", "disk", "--filename", "mydisk.vmdk", "--format", "vmdk", "--size", 1024 * 10 ]
+      end
+        v.customize [ "storageattach", "server", "--storagectl", "IDE", "--port", "1", "--device", "0", "--type", "hdd", "--medium", file_to_disk]
+    end
+    server.vm.hostname = "server"
+  end
+
+
+  config.vm.define "client" do |client|
+    client.vm.network "private_network", ip: "192.168.11.151"
+    client.vm.provider "virtualbox" do |v|
+      v.memory = 512
+      v.cpus = 1
+    end
+    client.vm.hostname = "client"
+  end
+
+#  config.vm.provision "BORG", type:'ansible' do |ansible|
+#    ansible.inventory_path = './provision/inventory'
+#    ansible.playbook = './provision/playbook.yml'
+#  end
+end
+
