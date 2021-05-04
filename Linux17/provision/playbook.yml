@@ -1,12 +1,53 @@
 ---
-- name: Configuration of Backup
+#- name: Configuring ssh pass enable
+#  hosts: server
+#  become: true
+#  roles:
+#    - sshpassdisable
+#    - sshpassenable
+#sshconfig  sshpassdisable  sshpassenable
+
+#- name: Configuring ssh pass enable
+#  hosts: client
+#  become: true
+#  roles:
+#    - sshpassdisable
+#    - sshpassenable
+
+#- name: Configuring disable
+#  hosts: client
+#  become: true
+#  roles:
+#    - sshconfig
+#- name: Configuring disable
+#  hosts: server
+#  become: true
+#  roles:
+#    - sshconfig
+
+#- name: Configuring disable
+#  hosts: server
+#  become: true
+#  roles:
+#    - sshpassdisable
+#    - sshpassdisable
+#- name: Configuring disable
+#  hosts: client
+#  become: true
+#  roles:
+##    - sshpassdisable
+#    - sshpassdisable
+
+
+- name: Configuration of Backup Server
   hosts: server
   become: true
   roles:
     - borg 
 #    - mkrepo
-#  hosts: client
-#  become: true
-#  roles:
-#    - borgbackup
+- name: Configuration of Backup Client
+  hosts: client
+  become: true
+  roles:
+    - borgclient
     

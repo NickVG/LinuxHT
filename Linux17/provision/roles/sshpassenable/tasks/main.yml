@@ -1,0 +1,4 @@
+---
+# tasks file for sshpassenable
+- name: Enable ssh via password
+  include_tasks: sshpassenable.yml 

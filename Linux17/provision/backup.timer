@@ -1,0 +1,12 @@
+[Unit]
+Description=Execute backup every 5 min
+
+[Timer]
+#Run 300 sec after boot
+OnBootSec=300
+#Run every 300 sec
+OnUnitInactiveSec=300
+Unit=backup.service
+
+[Install]
+WantedBy=multi-user.target

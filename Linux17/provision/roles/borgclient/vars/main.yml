@@ -1,0 +1,8 @@
+---
+# vars file for ./roles/borg
+packages_server:
+  - epel-release
+  - borgbackup
+  - vim
+#packages_server:
+  

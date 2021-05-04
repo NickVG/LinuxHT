@@ -1,0 +1,23 @@
+---
+- name: Configuration of backup Schedule
+  copy:
+    src: files/backup.service
+    dest: /etc/systemd/system/backup.service
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+- name: Configuration of backup Schedule Timer
+  copy:
+    src: files/backup.timer
+    dest: /etc/systemd/system/backup.timer
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+- name: Enable backup.timer
+  ansible.builtin.systemd:
+    name: backup.timer
+    daemon_reload: yes
+    state: started
+    enabled: yes

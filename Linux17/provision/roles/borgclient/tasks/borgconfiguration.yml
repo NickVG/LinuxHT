@@ -1,0 +1,7 @@
+---
+- name: Configure repository
+  script: files/repoinit.sh
+
+- name: Run first Backup
+  script: files/backup.sh
+

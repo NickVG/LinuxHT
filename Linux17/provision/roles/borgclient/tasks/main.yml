@@ -1,0 +1,11 @@
+---
+# tasks file for ./roles/borgclientg
+- name: Install borgbackup
+  include_tasks: install.yml
+
+- name: Init repo and run first backup
+  include_tasks: borgconfiguration.yml
+
+- name: Configuration of Schedule
+  include_tasks: backuptimer.yml 
+

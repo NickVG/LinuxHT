@@ -2,8 +2,8 @@ all:
   hosts:
     server:
       ansible_host: 192.168.11.150
-      ansible_ssh_private_key_file: ./.vagrant/machines/web/virtualbox/private_key
+      ansible_ssh_private_key_file: ./.vagrant/machines/server/virtualbox/private_key
     client:
       ansible_host: 192.168.11.151
-      ansible_ssh_private_key_file: ./.vagrant/machines/log/virtualbox/private_key
+      ansible_ssh_private_key_file: ./.vagrant/machines/client/virtualbox/private_key
 
