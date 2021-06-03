@@ -1,0 +1,61 @@
+# -*- mode: ruby -*-
+# vim: set ft=ruby :
+#sed -i '65s/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+
+disk = './secondDisk.vdi'
+$script = <<-'SCRIPT'
+mkdir -p ~root/.ssh; cp ~vagrant/.ssh/auth* ~root/.ssh
+sed -i '65s/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+systemctl restart sshd
+cat /vagrant/provision/hosts > /etc/hosts
+yum install sshpass -y
+SCRIPT
+
+$scriptssh = <<-'SCRIPT'
+ssh-keygen -q -t rsa -N '' <<< ""$'\n'"y" 2>&1 >/dev/null
+sshpass -p "vagrant" ssh-copy-id -o StrictHostKeyChecking=no root@server
+sshpass -p "vagrant" ssh-copy-id -o StrictHostKeyChecking=no root@client
+SCRIPT
+
+#$scriptsshkey = <<-'SCRIPT'
+#sed -i '65s/PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+#systemctl restart sshd
+#SCRIPT
+#borg init -e none server:/var/backup/client
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "centos/7"
+  config.vbguest.auto_update = false
+
+  config.vm.define "web" do |web|
+    web.vm.network "private_network", ip: "192.168.11.150"
+    web.vm.provider "virtualbox" do |v|
+      unless File.exist?(disk)
+        v.customize ['createhd', '--filename', disk, '--variant', 'Fixed', '--size', 2 * 1024]
+      end
+      v.memory = 512
+      v.cpus = 1
+      v.customize ['storageattach', :id,  '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', disk]
+    end
+    web.vm.hostname = "web"
+  end
+
+#  config.vm.define "db" do |db|
+#    db.vm.network "private_network", ip: "192.168.11.151"
+#    db.vm.provider "virtualbox" do |v|
+#      v.memory = 512
+#      v.cpus = 1
+#    end
+#    db.vm.hostname = "db"
+#  end
+  config.vm.provision "sshpassw", type: "shell", inline: $script
+#  config.vm.provision "sshkey", type: "shell", inline: $scriptssh
+
+  config.vm.provision "MySQL", type:'ansible' do |ansible|
+    ansible.inventory_path = './provision/inventory'
+    ansible.playbook = './provision/playbook.yml'
+  end
+    
+end
+

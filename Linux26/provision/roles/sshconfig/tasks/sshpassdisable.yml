@@ -1,0 +1,10 @@
+---
+- name: Generate an OpenSSH keypair with the default values (4096 bits, rsa)
+  community.crypto.openssh_keypair:
+    path: /root/.ssh/id_rsa
+- name: Configuring ssh
+  script:
+    path: files/disablepass.sh
+#- name: Generate an OpenSSH keypair with the default values (4096 bits, rsa)
+#  community.crypto.openssh_keypair:
+#    path: /root/.ssh/id_rsa

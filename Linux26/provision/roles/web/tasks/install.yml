@@ -1,0 +1,73 @@
+---
+# tasks file for nginx
+#- name: Install EPEL, NGINX, and osther packages
+#  yum:
+#    name: "{{ item }}"
+#    state: present
+#  loop: "{{ packages_server }}"
+#  notify:
+#    - restart php
+#  tags:
+#    - packages
+
+- name: Install remi repo.
+  yum:
+    name: http://rpms.remirepo.net/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm
+    state: present
+
+- name: Import remi GPG key.
+  rpm_key:
+    key: http://rpms.remirepo.net/RPM-GPG-KEY-remi
+    state: present
+
+- name: Enable php72 repo
+  ini_file:
+    dest: /etc/yum.repos.d/remi-php72.repo
+    section: remi-php72
+    option: enabled
+    value: 1
+
+# tasks file for nginx
+- name: Install EPEL, NGINX, and osther packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ packages_server }}"
+#  notify:
+#    - restart php
+  tags:
+    - packages
+
+#- name: Install php72
+#  yum:
+#    enablerepo: "remi,remi-php72"
+#    name: php
+#    version: 
+#    state: present
+#  notify:
+#    - restart php
+#  tags:
+#    - packages
+
+- name: Install mariadb
+  yum:
+    name: mariadb-server
+    state: present
+  notify:
+    - enable mariadb
+  tags:
+    - dbserver
+
+#- name: Install PyMySQL python package
+#  pip:
+#    name: PyMySQL
+- name: Configure hosts file
+  copy:
+    src: files/hosts
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+
+

@@ -1,0 +1,4 @@
+---
+# tasks file for sshconfig
+- name: Disbale ssh through password
+  include_tasks: sshpassdisable.yml

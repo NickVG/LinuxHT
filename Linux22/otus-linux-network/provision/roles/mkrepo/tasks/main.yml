@@ -1,0 +1,10 @@
+---
+- name: Install Packages
+  include_tasks: install.yml
+
+- name: configure Nginx for repo
+  include_tasks: config_nginx.yml
+
+- name: configure repo
+  include_tasks: config_repo.yml
+

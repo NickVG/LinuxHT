@@ -1,0 +1,41 @@
+---
+# tasks file for nginx
+- name: Install EPEL Repo package from standart repo
+  yum:
+    name: epel-release
+    state: present
+- name: Install borgbackup server and other packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ packages_server }}"
+#  notify:
+#    - restart nginx
+  tags:
+    - borg-package 
+    - packages
+- name: Configure hosts file
+  copy:
+    src: files/hosts
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+
+#- name: Install borgbackup client and other packages
+#  yum:
+#    name: "{{ item }}"
+#    state: present
+#  loop: "{{ packages_client }}"
+#  notify:
+#    - restart nginx
+#  tags:
+#    - borg-package
+#    - packages
+
+
+
+
+
+

@@ -1,0 +1,20 @@
+---
+# tasks file for bacula server
+- name: Create a ext4 filesystem on /dev/sdb
+#- name: Create a ext4 filesystem on /dev/sdb
+  community.general.filesystem:
+    fstype: ext4
+    dev: /dev/sdb
+  tags:
+    - filesystem
+- name: Creates backup repositry 
+  file:
+    path: /var/backup
+    state: directory
+- name: mount FS from previous step
+  ansible.posix.mount:
+    path: /var/backup
+    src: /dev/sdb
+    fstype: ext4
+    state: mounted
+

@@ -1,0 +1,24 @@
+---
+# vars file for ./roles/web
+packages_server:
+  - epel-release
+  - nginx
+  - vim
+  - wget
+  - php
+  - php-cli
+  - php-fpm
+  - php-mysql
+  - php-json
+  - php-opcache
+  - php-mbstring
+  - php-curl
+  - php-gd
+  - php-intl
+  - php-soap
+  - php-xml
+  - php-xmlrpc
+  - php-zip
+  - setroubleshoot-server-3.2.30-8.el7.x86_64
+#packages_server:
+  

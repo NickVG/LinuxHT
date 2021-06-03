@@ -1,0 +1,56 @@
+---
+- name: Copy nginx and config  with owner and permissions
+  ansible.builtin.copy:
+    src: files/default_server.conf
+    dest: /etc/nginx/conf.d/default_server.conf
+    owner: nginx
+    group: nginx
+    mode: '0644'
+
+- name: Copy public cert with owner and permissions
+  ansible.builtin.copy:
+    src: files/certificate.pem
+    dest: /etc/nginx/certificate.pem
+    owner: nginx
+    group: nginx
+    mode: '0644'
+
+- name: Copy private key with owner and permissions
+  ansible.builtin.copy:
+    src: files/key.pem
+    dest: /etc/nginx/key.pem
+    owner: nginx
+    group: nginx
+    mode: '0644'
+
+- name: Copy file with owner and permissions
+  ansible.builtin.copy:
+    src: files/www.conf
+    dest: /etc/php-fpm.d/www.conf
+#    dest: /usr/share/nginx/html/wordpress/www.conf
+    owner: nginx
+    group: nginx
+    mode: '0644'
+
+- name: Change Ownership of wordpress files
+  file:
+    path: /usr/share/nginx/html/wordpress
+    owner: nginx
+#    group: nginx
+    mode: '0755'
+    state: directory
+    recurse: yes
+  notify:
+  - restart nginx
+
+- name: Change Ownership of var lib php
+  file:
+    path: /usr/share/nginx/html/wordpress
+    owner: nginx
+    group: nginx
+    mode: '0755'
+    state: directory
+    recurse: yes
+  notify:
+  - restart php
+

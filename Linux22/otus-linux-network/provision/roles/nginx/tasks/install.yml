@@ -1,0 +1,16 @@
+---
+# tasks file for nginx
+- name: Install EPEL Repo package from standart repo
+  yum:
+    name: epel-release
+    state: present
+- name: Install nginx package from epel repo
+  yum:
+    name: nginx
+    state: latest
+  notify:
+    - restart nginx
+  tags:
+    - nginx-package Как видите добавлены tags
+    - packages
+

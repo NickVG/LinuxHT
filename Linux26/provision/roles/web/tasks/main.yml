@@ -1,0 +1,16 @@
+---
+# tasks file for ./roles/web
+- name: Configure FS
+  include_tasks: mount.yml
+
+- name: Install WebServer
+  include_tasks: install.yml
+
+- name: Install Wordpress
+  include_tasks: wordpress.yml
+
+- name: Configuration MySQL
+  include_tasks: dbConfig.yml
+
+- name: Configuration MySQL
+  include_tasks: webconfig.yml

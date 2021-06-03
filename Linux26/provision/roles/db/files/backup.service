@@ -1,0 +1,9 @@
+[Unit]
+Description=Backup of etc
+
+[Service]
+Type=simple
+ExecStart=/vagrant/provision/backup.sh
+
+[Install]
+WantedBy=multi-user.target

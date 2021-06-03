@@ -1,0 +1,22 @@
+[Unit]
+Description=knocking port
+
+[Service]
+Type=simple
+ExecStart=/etc/iptables/knock.sh
+
+[Install]
+WantedBy=multi-user.target
+[root@inetRouter iptables]# cat knock.timer
+[Unit]
+Description=Execute knock every 300 sec
+
+[Timer]
+#Run 300 sec after boot
+OnBootSec=300
+#Run every 300 sec
+OnUnitInactiveSec=300
+Unit=knock.service
+
+[Install]
+WantedBy=multi-user.target

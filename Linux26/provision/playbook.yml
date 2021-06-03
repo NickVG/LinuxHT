@@ -1,0 +1,21 @@
+---
+
+- name: Configuration of WEB Server
+  hosts: web
+  become: true
+  roles:
+    - web
+    - firewall
+#    - mkrepo
+- name: Configuration of DB Server
+  hosts: db
+  become: true
+  roles:
+    - db
+- name: Configuration of selinux context
+  hosts: web
+  become: true
+  roles:
+    - selinux
+  tags: selinux
+    

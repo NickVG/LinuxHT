@@ -1,0 +1,9 @@
+---
+- name: enable mariadb
+  systemd:
+    name: mariadb
+    enabled: yes
+    state: started
+- name: Create database user with password and all database privileges and WITH GRANT OPTION
+  script: files/mysql.sh
+    

@@ -1,0 +1,4 @@
+---
+# tasks file for selinux
+- name: Modify fccontext of wordpress
+  include_tasks: fccontextwebweb.yml

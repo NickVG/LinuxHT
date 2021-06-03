@@ -1,0 +1,17 @@
+---
+#- name: Enable ssh through password
+#  script: files/enablepass.sh
+
+- name: Install sshpass
+  yum:
+    name: sshpass
+    state: present
+- name: Configure hosts file
+  copy:
+    src: files/hosts
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  

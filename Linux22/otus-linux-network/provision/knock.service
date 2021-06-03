@@ -1,0 +1,9 @@
+[Unit]
+Description=knocking port
+
+[Service]
+Type=simple
+ExecStart=/etc/iptables/knock.sh
+
+[Install]
+WantedBy=multi-user.target

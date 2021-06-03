@@ -1,0 +1,7 @@
+---
+- name: Install EPEL Repo
+  hosts: inetRouter2
+  become: true
+  roles:
+    - nginx 
+    - mkrepo

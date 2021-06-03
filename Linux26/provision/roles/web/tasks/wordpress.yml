@@ -1,0 +1,10 @@
+---
+- name: Download wordpress
+  get_url:
+    url: https://wordpress.org/latest.tar.gz
+    dest: /usr/share/nginx/html/latest.tar.gz
+- name: Unzip wordpress
+  unarchive:
+    src: /usr/share/nginx/html/latest.tar.gz
+    dest: /usr/share/nginx/html/
+    remote_src: yes

@@ -1,0 +1,16 @@
+---
+- name: Allow nginx to modify files in /usr/share/nginx/html/wordpress
+#  sefcontext:
+#    target: '/usr/share/nginx/html/wordpress(/.*)?'
+#    setype: httpd_sys_rw_content_t
+#    state: present
+#  notify:
+#  - restart nginx
+#  - restart php
+  command: semanage fcontext -a -t httpd_sys_rw_content_t '/usr/share/nginx/html/wordpress(/.*)?'
+
+- name: Apply new SELinux file context to filesystem
+  command: restorecon -irv /usr/share/nginx/html/wordpress
+  notify:
+    - restart nginx
+    - restart php
